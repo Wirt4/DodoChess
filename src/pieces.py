@@ -5,18 +5,21 @@ Created on Jul 26, 2020
 '''
 
 class ChessPerson():
+    name = "chessman"
    
-    def __init__(self, isWhite, row, col):
+    def __init__(self, isWhite):
         if isWhite:
             self.color = "white"
         else:
             self.color ="black"
-        self.row = row
-        self.col = col
+            
+    def get_id(self):
+        return self.color + self.name
     
-    def get_pos(self):
-        return self.row + str(self.col)
+    def is_legal(self):
+        #should be a part of each piece, this is to override
+        pass
     
     
 class King(ChessPerson):
-    pass
+    name = "king"
