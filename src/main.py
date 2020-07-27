@@ -5,4 +5,4 @@ Created on Jul 26, 2020
 '''
 
 from board import Board
-b = Board()
+b = Board(8,8)

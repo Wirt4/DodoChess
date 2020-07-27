@@ -5,10 +5,7 @@ Created on Jul 26, 2020
 '''
 
 class ChessPerson():
-    '''
-    classdocs
-    '''
-
+   
     def __init__(self, isWhite, row, col):
         if isWhite:
             self.color = "white"
@@ -20,4 +17,6 @@ class ChessPerson():
     def get_pos(self):
         return self.row + str(self.col)
     
+    
 class King(ChessPerson):
+    pass
