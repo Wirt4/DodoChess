@@ -4,7 +4,7 @@ Created on Jul 26, 2020
 @author: wirt
 '''
 from pieces import King
-from __builtin__ import False
+from __builtin__ import False, True
 class Board():
     '''
     classdocs
@@ -12,14 +12,14 @@ class Board():
     #black_king = King(e,1)
     def __init__(self):
         self.b = self.build_board()
+        self.white_king = King(True)
+        self.place_piece(self.white_king, 'e', 1)
         
     def build_board(self):
         #may add functionality here later on for different layouts
-        white_king = King(True)
         side =8;
         col = [None] * side
         b = [col] * side
-        b[self.row_to_i('e')][self.col_to_i(1)] = white_king
         return b
     
     def row_to_i(self, ch):
@@ -49,20 +49,38 @@ class Board():
         i_r = self.row_to_i(row)
         i_c = self.col_to_i(col)
         self.b[i_r][i_c] = piece
-        pass
+        piece.int_row = i_r
+        piece.int_col = i_c
         
     def remove_piece(self, row, col):
         self.b[self.row_to_i(row)][self.col_to_i(col)] = None
         
+    def on_board(self, row, col):
+        i_r = self.row_to_i(row)
+        i_c = self.col_to_i(col)
+        size = len(self.b)
+        if i_r < 0 or i_c < 0:
+            return False
+        if i_r > size or i_c > size:
+            return False
+        return True
+        
     def move(self, init_row, init_col, fin_row, fin_col ):
-        #convert from notation to cordinates
-        if self.is_piece(init_row, init_col):
-            piece = self.get_piece(init_row, init_col)
+        #determine if move is legal
+        if not self.on_board(fin_row, fin_col):
+            print("%s%d not on board" %(fin_row, fin_col))
+        if not self.is_piece(init_row, init_col):
+            print ("no piece there")
+            return 0
+        piece = self.get_piece(init_row, init_col)
+        if piece.is_legal(self.row_to_i(fin_row), self.col_to_i(fin_col)):
             self.place_piece(piece, fin_row, fin_col)
             self.remove_piece(init_row, init_col)
             print("%s %s moved to %s%d" % (piece.color, piece.name, fin_row, fin_col))
         else:
-            print("no piece there")
+            print("illegal move for %s %s" % (piece.color, piece.name))
+        return 0
+    
             
         
     #to move or capture a chess person

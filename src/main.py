@@ -6,4 +6,4 @@ Created on Jul 26, 2020
 
 from board import Board
 b = Board()
-b.move('e', 1, 'e', 2)
+b.move('e', 1, 'e', 1)
