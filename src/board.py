@@ -66,7 +66,6 @@ class Board():
         return True
         
     def move(self, init_row, init_col, fin_row, fin_col ):
-        #determine if move is legal
         if not self.on_board(fin_row, fin_col):
             print("%s%d not on board" %(fin_row, fin_col))
         if not self.is_piece(init_row, init_col):
