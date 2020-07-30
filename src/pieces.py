@@ -3,7 +3,7 @@ Created on Jul 26, 2020
 
 @author: wirt
 '''
-
+from enum import Enum
 class ChessPerson():
     name = "chessman"
     int_row =0
@@ -25,6 +25,9 @@ class ChessPerson():
             return False
         return True
     
+class ChesspersonColor(Enum):
+    BLACK = "black"
+    WHITE = "white"
     
 class King(ChessPerson):
     name = "king"

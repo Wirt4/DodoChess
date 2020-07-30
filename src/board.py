@@ -4,7 +4,6 @@ Created on Jul 26, 2020
 @author: wirt
 '''
 from pieces import King
-from __builtin__ import False, True
 class Board():
     '''
     classdocs
