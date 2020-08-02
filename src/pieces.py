@@ -1,63 +1,20 @@
-'''
-Created on Jul 29, 2020
 
-@author: wirt
-'''
 
-import enum
+class King():
+    def __init__(self, square):
+        self.square = square
 
-class PieceColor(enum.Enum):
-    BLACK = "black"
-    WHITE = "white"
-    
-class Piece():
-    #needs a PieceColor constant
-    # a PlaceAt variable, a Square object
-    moved = False
-    
-    def valid_moves(self):
-        #returns an array of Square objects
-        pass
-    
-    def attack_squares(self):
-        #returns an array of Square objects
-        pass
-    
-    def capture_free_moves(self):
-        #returns an array of Squares
-        pass
-    
-    def too_be_captured(self):
-        #todo: implement this method
-        return False
-        
-class King(Piece):
-    foo =""
-    
-class Queen(Piece):
-    foo =""
-    
-class Bishop(Piece):
-    foo =""
-    
-class Horsey(Piece):
-    foo =""
-    
-class Pawn(Piece):
-    promoted = False
-    #member - promoteTo is a Piece object
-    #member - moveTo is a moveTo Enum
+    def move(self, new_square):
+        self.square = new_square
 
-class PieceType(enum.Enum):
-    KING="king"
-    PAWN ="pawn"
-    QUEEN ="queen"
-    BISHOP = "bishop"
-    ROOK = "rook"
-    HORSEY = "horsey"
-    
-class MoveDirection(enum.Enum):
-    UP ="up"
-    DOWN = "down"
-    
-    
+    def end_square(self, board):
+        return self.square.col == board.length-1
+
+    def is_legal_move(self, new_square):
+        if self.square.is_equal(new_square):
+            return False
+        return abs(self.square.row - new_square.row) <= 1 and abs(self.square.col - new_square.col) <= 1
+
+    def get_coords(self):
+        coords = "" +str(self.square.row )+ " " + str(self.square.col)
+        return coords
