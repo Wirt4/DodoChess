@@ -3,56 +3,65 @@ Created on Jul 29, 2020
 
 @author: wirt
 '''
-import enum
+from src.pieces import King
 
-from pieces import PieceColor
+class Game:
+    game_over = False
+    piece_set = list()
 
-class CheckStatus(enum.Enum):
-    BLACK_IN_CHECK ="black in check"
-    WHITE_IN_CHECK = "white in check"
-    BLACK_CHECKMATED = "black checkmated"
-    WHITE_CHECKMATED = "white checkmated"
-    NO_CHECK = "no check"
-    
-class Game():
-    #need list of moves
-    turn = PieceColor.WHITE
-    #a cinch since white goes first
-    #need a list of players
-    #will need a Result variable
-    def add_move(self):
-        pass
-    
-    def is_ended(self):
-        pass
-    
-    def is_checked(self):
-        pass
-    
-    def operation(self):
-        pass
-    
-    def is_checkmated(self):
-        pass
+    def __init__(self):
+        self.white_king = King((0, 1), True)
+        self.black_king = King((7, 1), False)
+        self.piece_set.append(self.white_king)
+        self.piece_set.append(self.black_king)
 
-class Player():
-    #both of these are custom objects
-    def __init__(self, engine, piece_color):
-        self.engine = engine
-        self.piece_color = piece_color    
+    #I thing the possible attack moves can be stored with a dictionary keyed to each individual piece on the board
+    # just need to rewrite one entry per move, or possibly remove in case of capture
+    def commit_move(self,  move):
+        move.piece.position = move.target_tup
+        if self.white_king.at_end() or self.black_king.at_end():
+            self.game_over= True
+        #check if either king has hit the eighth square and update accordingly
 
-class PlayerEngineInterface():
-    
-    def makeMove(self):
-        pass
-    
-class HumanPlayer(PlayerEngineInterface):
-    
-    def makeMove(self):
-        pass
+    #returns a list of all pieces and their positions on the board
+    def all_piece_positions(self):
+        #using a set here to reenforce no two piceces may occupy the same space on the board
+        positions = set()
+        for p in self.piece_set:
+            record = "White" if p.is_white else "Black"
+            record += " " + str(p.type) + " " + str(p.position)
+            positions.add(record)
+        return positions
 
-class AIPlayer(PlayerEngineInterface):
-    
-    def makeMove(self):
-        pass
-        
+    def causes_check(self, move):
+        oppenent_king = None
+        if move.piece.is_white:
+            oppenent_king = self.black_king
+        else:
+            oppenent_king = self.black_king
+        if oppenent_king in move.piece.get_attacks():
+            return True
+        if move.piece.is_king:
+            for p in self.piece_set:
+                if p != move.piece:
+                    if move.target_tup in p.get_attacks():
+                        return True
+        return False
+
+class Move:
+    piece = None
+    target_tup = ();
+    def __init__(self,color_bool, coords, piece_set):
+        for i in piece_set:
+            if color_bool == i.is_white:
+                self.piece = i
+                break
+        self.target_tup = (int(coords[-2]), int(coords[-1]))
+#need to find the piece on the board,and store target coords at target_tup
+
+    def is_legal(self):
+        if self.target_tup in self.piece.get_attacks():
+            return True
+        return False
+
+    #eventually need to evaluate between two same color pieces

@@ -4,24 +4,31 @@ Created on Jul 29, 2020
 @author: wirt
 '''
 
-from src.board import *
+from src.game import Game
+from src.game import Move
+from src.player import Player
 
-board = Board()
+game = Game()
+p1 = Player("Harvey", True)
+p2 = Player("Bruce", False)
 
-while board.king.end_square(board)==False:
-    print("king at", board.king.get_coords())
-    print("enter 0 indexed coordinates to move to.")
-    row = input("row: ")
-    col = input("column: ")
-    row = int(row)
-    col = int(col)
-    if board.is_valid(row, col) == False:
-        print("invalid board coordinates")
+player = p1
+
+while not game.game_over:
+    coords = input(player.name + ", enter a move, or 'b' for piece positions ")
+    if coords[0] == 'b':
+        print(game.all_piece_positions())
         continue
-    square = Square(row, col)
-    if board.king.is_legal_move(square)==False:
-        print("illegal move for the king")
-        continue
-    board.king.move(square)
 
-print("hooray, you won")
+    move = Move(player.is_white, coords, game.piece_set)
+    # toggle players
+    #this happens after move is committed
+    if not move.is_legal() or game.causes_check(move):
+        print("illegal move")
+        continue
+    game.commit_move(move)
+    if game.game_over:
+        break
+    player = p1 if player == p2 else p2
+
+print(player.name + " wins")
